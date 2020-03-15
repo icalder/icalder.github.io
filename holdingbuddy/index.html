@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Holding Buddy</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">        
+
+        <!-- https://realfavicongenerator.net -->
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png">
+        <link rel="manifest" href="/static/icons/site.webmanifest">
+        <link rel="mask-icon" href="/static/icons/safari-pinned-tab.svg" color="#5bbad5">
+        <meta name="msapplication-TileColor" content="#da532c">
+        <meta name="theme-color" content="#51d2e9">
+
+        <link rel="stylesheet" type="text/css" href="/static/style.css" />
+        <link rel="stylesheet" type="text/css" href="/static/formelements.css" />
+    </head>
+    <body>
+        <form>
+            <div class="controls">
+                <label for="track">Inbound track</label>
+                <input type="text" id="track" name="track" size="3" value="0" />
+                <label for="lh">LH</label>
+                <input type="checkbox" class="switch" id="lh" name="lh" />
+                <label for="hdg">Hdg</label>
+                <input type="text" id="hdg" name="hdg" size="3" value="0" />
+                <label for="dark">Dark theme</label>
+                <input type="checkbox" class="switch" id="dark" name="dark" checked />
+            </div>
+        </form>
+        <div id="chart" class="chart">
+            <div class="timer-button"></div>
+        </div>
+        <div id="timer">
+            <div class="lcd">00:00</div>
+            <button class="start" type="button">Start</button>
+            <button class="stop" type="button">Stop</button>
+            <button class="reset" type="button">Reset</button>
+        </div>
+        <script src="/dist/bundle.js"></script>       
+    </body>
+</html>

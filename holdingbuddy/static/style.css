@@ -1,0 +1,148 @@
+:root {
+    --background-color: black;
+    --text-color: white;
+    --entry-path-color: white;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    overflow: hidden;
+    font-size: large;
+}
+
+div.controls {
+    display: inline-grid;
+    grid-template-columns: repeat(8, max-content);
+    column-gap: 0.5rem;
+    row-gap: 0.5rem;
+    align-items: center;
+}
+
+#chart {
+    margin-top: 15px;
+    position: relative;
+}
+
+#chart svg {
+    width: 90%;
+}
+
+@media screen and (max-width: 600px) {
+    div.controls {
+        grid-template-columns: repeat(4, max-content);
+    }
+}
+
+@media screen and (min-aspect-ratio: 16/11) {
+    body {
+        text-align: start;
+    }
+
+    div.controls {
+        display: block;
+        float: left;
+        grid-template-columns: none;
+    }
+
+    label, input {
+        display: block;
+    }
+
+    input {
+        margin-bottom: 1em !important;
+    }
+
+    #chart {
+        text-align: center;
+    }
+
+    #chart svg {
+        width: auto;
+    }
+}
+
+.chart .direct {
+    fill: #d5e0fe;
+    stroke: #aaa;
+    opacity: 50%;
+}
+
+.chart .teardrop {
+    fill: #656371;
+    stroke: #aaa;
+    opacity: 50%;
+}
+
+.chart .parallel {
+    fill: #ff7369;
+    stroke: #aaa;
+    opacity: 50%;
+}
+
+.segment-label {
+    fill: var(--text-color);
+    font-size: 1.2em;
+}
+
+.racetrack-arrow {
+    fill: #f00;
+}
+
+#racetrack-group path {
+    fill-opacity: 0;
+    stroke: #000;
+    stroke-width: 2;
+}
+
+#entry-group text {
+    fill: var(--text-color);
+}
+
+.entry-arrow {
+    fill: var(--entry-path-color);
+}
+
+.timer-button {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    bottom: 0px;
+    right: 0px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    background-image: url('/static/timer.svg');
+}
+
+#timer {
+    visibility: hidden;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: .7;
+    z-index: 1000;
+    text-align: center;
+}
+
+#timer .lcd {
+    background: #666666;
+    padding: 0.5em;
+    font-size: 2em;
+    border: 2px solid black;
+    border-radius: 5px;
+}
+
+#timer button {
+    font-size: 2em;
+    margin-top: 5px;
+    opacity: 1.0;
+}
+
+#entry-group path,line {
+    stroke: var(--entry-path-color);
+    stroke-width: 1;    
+    stroke-dasharray: 3 3;
+}
