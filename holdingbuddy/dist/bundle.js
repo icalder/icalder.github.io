@@ -2717,6 +2717,7 @@
 	        });
 	    }
 	}
+	//# sourceMappingURL=controls.js.map
 
 	var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -13721,6 +13722,7 @@
 	List.extend(getMethodNames());
 	registerMorphableType([SVGNumber, Color, Box, Matrix, SVGArray, PointArray, PathArray]);
 	makeMorphable();
+	//# sourceMappingURL=svg.esm.js.map
 
 	class Coord {
 	    constructor(x, y) {
@@ -13774,6 +13776,7 @@
 	    t.path(segment);
 	    t.textPath().attr('startOffset', '50%');
 	}
+	//# sourceMappingURL=drawing.js.map
 
 	class Defs$1 {
 	    constructor(svg) {
@@ -13802,6 +13805,7 @@
 	        return plane;
 	    }
 	}
+	//# sourceMappingURL=svgdefs.js.map
 
 	class Segment {
 	    constructor(name, startAngle, sweepDegrees) {
@@ -13826,6 +13830,7 @@
 	        return heading >= start && heading <= end;
 	    }
 	}
+	//# sourceMappingURL=segment.js.map
 
 	// https://svgjs.com/docs/3.0/installation/
 	const SIN_30 = 0.5;
@@ -13851,15 +13856,15 @@
 	        this._headingChangedHandler = handler;
 	    }
 	    set inboundTrack(value) {
-	        var _a;
+	        var _a, _b;
 	        this._inboundTrack = Math.abs(value % 360);
-	        (_a = this._inboundTrackChangedHandler) === null || _a === void 0 ? void 0 : _a.call(this, this._inboundTrack);
+	        (_b = (_a = this)._inboundTrackChangedHandler) === null || _b === void 0 ? void 0 : _b.call(_a, this._inboundTrack);
 	        this.draw();
 	    }
 	    set heading(value) {
-	        var _a;
+	        var _a, _b;
 	        this._heading = Math.abs(value % 360);
-	        (_a = this._headingChangedHandler) === null || _a === void 0 ? void 0 : _a.call(this, this._heading);
+	        (_b = (_a = this)._headingChangedHandler) === null || _b === void 0 ? void 0 : _b.call(_a, this._heading);
 	        this.draw();
 	    }
 	    set lefthand(value) {
@@ -14141,6 +14146,7 @@
 	        plane.rotate(this._heading, ...planePosition.asArray);
 	    }
 	}
+	//# sourceMappingURL=chart.js.map
 
 	class Timer {
 	    constructor(timerButtonSelector, overlaySelector, lcdSelector) {
@@ -14150,7 +14156,8 @@
 	        this.seconds = 0;
 	        this.overlay = document.querySelector(overlaySelector);
 	        this.lcd = document.querySelector(lcdSelector);
-	        (_a = document.querySelector(`${overlaySelector} .start`)) === null || _a === void 0 ? void 0 : _a.addEventListener('click', (evt) => {
+	        this.startBtn = document.querySelector(`${overlaySelector} .start`);
+	        (_a = this.startBtn) === null || _a === void 0 ? void 0 : _a.addEventListener('click', (evt) => {
 	            this.startTimer();
 	        });
 	        (_b = document.querySelector(`${overlaySelector} .stop`)) === null || _b === void 0 ? void 0 : _b.addEventListener('click', (evt) => {
@@ -14174,6 +14181,7 @@
 	        });
 	    }
 	    startTimer() {
+	        this.startBtn.disabled = true;
 	        if (!this.intervalTimer) {
 	            this.intervalTimer = window.setInterval(() => this.incrementTime(), 1000);
 	        }
@@ -14183,6 +14191,7 @@
 	            window.clearInterval(this.intervalTimer);
 	        }
 	        this.intervalTimer = undefined;
+	        this.startBtn.disabled = false;
 	    }
 	    pad(n, leadingZeros = 2) {
 	        let s = String(n);
@@ -14279,5 +14288,6 @@
 	    window.onresize = resize;
 	    resize();
 	};
+	//# sourceMappingURL=index.js.map
 
 })));
