@@ -2684,6 +2684,7 @@
             this.lefthandChangedHandlers = [];
             this.heading = 0;
             this.headingChangedHandlers = [];
+            this.useCompass = false;
         }
         addTrackChangedHandler(handler) {
             this.trackChangedHandlers.push(handler);
@@ -2720,6 +2721,12 @@
                 }
             });
         }
+        set compassCheckboxSelector(selector) {
+            var _a;
+            (_a = document.querySelector(selector)) === null || _a === void 0 ? void 0 : _a.addEventListener('change', (evt) => {
+                this.useCompass = evt.target.checked;
+            });
+        }
         set trackInputSelector(selector) {
             var _a;
             (_a = document.querySelector(selector)) === null || _a === void 0 ? void 0 : _a.addEventListener('change', (evt) => {
@@ -2740,7 +2747,16 @@
                 this.heading = heading;
             });
         }
+        set compassDir(dir) {
+            if (this.useCompass && dir != null) {
+                const heading = dir;
+                this.headingChangedHandlers
+                    .forEach(h => h(this.heading, heading));
+                this.heading = heading;
+            }
+        }
     }
+    //# sourceMappingURL=controls.js.map
 
     var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -13745,6 +13761,7 @@
     List.extend(getMethodNames());
     registerMorphableType([SVGNumber, Color, Box, Matrix, SVGArray, PointArray, PathArray]);
     makeMorphable();
+    //# sourceMappingURL=svg.esm.js.map
 
     class Coord {
         constructor(x, y) {
@@ -13798,6 +13815,7 @@
         t.path(segment);
         t.textPath().attr('startOffset', '50%');
     }
+    //# sourceMappingURL=drawing.js.map
 
     class Defs$1 {
         constructor(svg) {
@@ -13826,6 +13844,7 @@
             return plane;
         }
     }
+    //# sourceMappingURL=svgdefs.js.map
 
     class Segment {
         constructor(name, startAngle, sweepDegrees) {
@@ -13850,6 +13869,7 @@
             return heading >= start && heading <= end;
         }
     }
+    //# sourceMappingURL=segment.js.map
 
     // https://svgjs.com/docs/3.0/installation/
     const SIN_30 = 0.5;
@@ -14165,6 +14185,7 @@
             plane.rotate(this._heading, ...planePosition.asArray);
         }
     }
+    //# sourceMappingURL=chart.js.map
 
     class Timer {
         constructor(timerButtonSelector, overlaySelector, lcdSelector) {
@@ -14243,6 +14264,7 @@
             this.overlayVisible = false;
         }
     }
+    //# sourceMappingURL=timer.js.map
 
     // HTML element selectors
     const chartId = '#chart';
@@ -14250,6 +14272,7 @@
     const headingId = '#hdg';
     const lefthandId = '#lh';
     const darkId = '#dark';
+    const compassId = '#compass';
     const svgSelector = `${chartId} svg`;
     const timerButtonSelector = '.timer-button';
     const timerId = '#timer';
@@ -14280,6 +14303,7 @@
         controls.lefthandCheckboxSelector = lefthandId;
         controls.headingInputSelector = headingId;
         controls.darkThemeCheckboxSelector = darkId;
+        controls.compassCheckboxSelector = compassId;
         controls.addTrackChangedHandler((_, newTrack) => {
             chart.inboundTrack = newTrack;
         });
@@ -14302,6 +14326,16 @@
             chart.lefthand = !chart.lefthand;
             document.querySelector(lefthandId).checked = chart.lefthand;
         });
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', eventData => {
+                if ('webkitCompassHeading' in eventData) {
+                    controls.compassDir = eventData['webkitCompassHeading'];
+                }
+                else {
+                    controls.compassDir = eventData.alpha;
+                }
+            });
+        }
         const timer = new Timer(timerButtonSelector, timerId, timerLCDSelector);
         const resize = () => {
             const chart = document.querySelector(chartId);
