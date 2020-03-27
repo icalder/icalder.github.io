@@ -2756,7 +2756,6 @@
             }
         }
     }
-    //# sourceMappingURL=controls.js.map
 
     var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -13761,7 +13760,6 @@
     List.extend(getMethodNames());
     registerMorphableType([SVGNumber, Color, Box, Matrix, SVGArray, PointArray, PathArray]);
     makeMorphable();
-    //# sourceMappingURL=svg.esm.js.map
 
     class Coord {
         constructor(x, y) {
@@ -13815,7 +13813,6 @@
         t.path(segment);
         t.textPath().attr('startOffset', '50%');
     }
-    //# sourceMappingURL=drawing.js.map
 
     class Defs$1 {
         constructor(svg) {
@@ -13844,7 +13841,6 @@
             return plane;
         }
     }
-    //# sourceMappingURL=svgdefs.js.map
 
     class Segment {
         constructor(name, startAngle, sweepDegrees) {
@@ -13869,7 +13865,6 @@
             return heading >= start && heading <= end;
         }
     }
-    //# sourceMappingURL=segment.js.map
 
     // https://svgjs.com/docs/3.0/installation/
     const SIN_30 = 0.5;
@@ -14185,7 +14180,6 @@
             plane.rotate(this._heading, ...planePosition.asArray);
         }
     }
-    //# sourceMappingURL=chart.js.map
 
     class Timer {
         constructor(timerButtonSelector, overlaySelector, lcdSelector) {
@@ -14264,7 +14258,6 @@
             this.overlayVisible = false;
         }
     }
-    //# sourceMappingURL=timer.js.map
 
     // HTML element selectors
     const chartId = '#chart';
