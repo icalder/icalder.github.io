@@ -2676,6 +2676,24 @@
     })(window, document, 'Hammer');
     });
 
+    const darkTheme = {
+        '--background-color': 'black',
+        '--text-color': 'white',
+        '--entry-path-color': 'white',
+        '--menu-background-color': '#656371',
+        '--favourites-header-color': '#18181b',
+        '--favourites-stripe-color': '#3d3b44'
+    };
+    const lightTheme = {
+        '--background-color': '#ddd',
+        '--text-color': 'black',
+        '--entry-path-color': '#777',
+        '--menu-background-color': '#a1a0ac',
+        '--favourites-header-color': '#d6d6db',
+        '--favourites-stripe-color': '#6c6b7b'
+    };
+    //# sourceMappingURL=themes.js.map
+
     class Controls {
         constructor() {
             this.track = 0;
@@ -2685,6 +2703,7 @@
             this.heading = 0;
             this.headingChangedHandlers = [];
             this.useCompass = false;
+            this.menuVisible = false;
         }
         addTrackChangedHandler(handler) {
             this.trackChangedHandlers.push(handler);
@@ -2707,17 +2726,9 @@
         set darkThemeCheckboxSelector(selector) {
             var _a;
             (_a = document.querySelector(selector)) === null || _a === void 0 ? void 0 : _a.addEventListener('change', (evt) => {
-                if (evt.target.checked) {
-                    // Dark theme
-                    document.body.style.setProperty('--background-color', 'black');
-                    document.body.style.setProperty('--text-color', 'white');
-                    document.body.style.setProperty('--entry-path-color', 'white');
-                }
-                else {
-                    // Light theme
-                    document.body.style.setProperty('--background-color', '#ddd');
-                    document.body.style.setProperty('--text-color', 'black');
-                    document.body.style.setProperty('--entry-path-color', '#777');
+                const theme = (evt.target.checked) ? darkTheme : lightTheme;
+                for (let [k, v] of Object.entries(theme)) {
+                    document.body.style.setProperty(k, v);
                 }
             });
         }
@@ -2756,6 +2767,7 @@
             }
         }
     }
+    //# sourceMappingURL=controls.js.map
 
     var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -13760,6 +13772,7 @@
     List.extend(getMethodNames());
     registerMorphableType([SVGNumber, Color, Box, Matrix, SVGArray, PointArray, PathArray]);
     makeMorphable();
+    //# sourceMappingURL=svg.esm.js.map
 
     class Coord {
         constructor(x, y) {
@@ -13813,6 +13826,7 @@
         t.path(segment);
         t.textPath().attr('startOffset', '50%');
     }
+    //# sourceMappingURL=drawing.js.map
 
     class Defs$1 {
         constructor(svg) {
@@ -13841,6 +13855,7 @@
             return plane;
         }
     }
+    //# sourceMappingURL=svgdefs.js.map
 
     class Segment {
         constructor(name, startAngle, sweepDegrees) {
@@ -13865,6 +13880,7 @@
             return heading >= start && heading <= end;
         }
     }
+    //# sourceMappingURL=segment.js.map
 
     // https://svgjs.com/docs/3.0/installation/
     const SIN_30 = 0.5;
@@ -13876,6 +13892,7 @@
             this._lefthand = false;
             this._inboundTrack = 0;
             this._heading = 0;
+            this._fixName = '';
             // reqd for Hammer
             this.lastInboundTrack = 0;
             this.startRotation = 0;
@@ -13893,6 +13910,7 @@
             var _a;
             this._inboundTrack = Math.abs(value % 360);
             (_a = this._inboundTrackChangedHandler) === null || _a === void 0 ? void 0 : _a.call(this, this._inboundTrack);
+            this.fixName = '';
             this.draw();
         }
         set heading(value) {
@@ -13903,10 +13921,15 @@
         }
         set lefthand(value) {
             this._lefthand = value;
+            this.fixName = '';
             this.draw();
         }
         get lefthand() {
             return this._lefthand;
+        }
+        set fixName(value) {
+            this._fixName = value;
+            this.draw();
         }
         rotationStarted(rotation) {
             this.startRotation = Math.round(rotation);
@@ -13991,6 +14014,9 @@
             if (this.holdGroup) {
                 this.holdGroup.remove();
             }
+            if (this.fixNameText) {
+                this.fixNameText.remove();
+            }
             this.holdGroup = this.svg.group().id('racetrack-group');
             const [cx, cy] = this.fix.asArray;
             // Ref orientation for width/height is 0deg inbound track RH turn i.e.
@@ -14059,6 +14085,13 @@
             }).ref(...outboundMarkerFactory.refPos.asArray).attr({ orient: this.inboundTrackDeg > 180 ? 'auto' : '270' });
             outboundLeg.marker('start', outboundHeading);
             this.holdGroup.rotate(this.inboundTrackDeg, cx, cy);
+            // If we have a fix name let's draw it
+            if (this._fixName) {
+                const ypos = (this._inboundTrack >= 0 && this._inboundTrack <= 80) ||
+                    (this._inboundTrack >= 180 && this._inboundTrack <= 260) ? cy + 5 : cy - 20;
+                this.fixNameText = this.svg.text(txt => txt.tspan(this._fixName)
+                    .addClass('fixName')).x(cx + 5).y(ypos);
+            }
         }
         calculatePlanePosition() {
             // Position the plane on a radial line.  Use 80% of the canvas width or height - whichever is smaller
@@ -14180,6 +14213,7 @@
             plane.rotate(this._heading, ...planePosition.asArray);
         }
     }
+    //# sourceMappingURL=chart.js.map
 
     class Timer {
         constructor(timerButtonSelector, overlaySelector, lcdSelector) {
@@ -14258,6 +14292,168 @@
             this.overlayVisible = false;
         }
     }
+    //# sourceMappingURL=timer.js.map
+
+    // https://gist.github.com/hagemann/382adfc57adbd5af078dc93feef01fe1
+    function slugify(s) {
+        const a = 'àáâäæãåāăąçćčđďèéêëēėęěğǵḧîïíīįìłḿñńǹňôöòóœøōõőṕŕřßśšşșťțûüùúūǘůűųẃẍÿýžźż·/_,:;';
+        const b = 'aaaaaaaaaacccddeeeeeeeegghiiiiiilmnnnnoooooooooprrsssssttuuuuuuuuuwxyyzzz------';
+        const p = new RegExp(a.split('').join('|'), 'g');
+        return s.toString().toLowerCase()
+            .replace(/\s+/g, '-') // Replace spaces with -
+            .replace(p, c => b.charAt(a.indexOf(c))) // Replace special characters
+            .replace(/&/g, '-and-') // Replace & with 'and'
+            .replace(/[^[a-zA-Z0-9أ-ي]-]+/g, "") // Arabic support
+            .replace(/--+/g, '-') // Replace multiple - with single -
+            .replace(/^-+/, '') // Trim - from start of text
+            .replace(/-+$/, ''); // Trim - from end of text
+    }
+    class Hold {
+        constructor(fix, inboundTrack, lefthand = false) {
+            this.fix = fix;
+            this.inboundTrack = inboundTrack;
+            this.lefthand = lefthand;
+            this.id = slugify(fix);
+        }
+    }
+    class Favourites {
+        constructor(tableSelector, addHoldTemplate, addHoldHandler) {
+            this.tableSelector = tableSelector;
+            this.addHoldTemplate = addHoldTemplate;
+            this.addHoldHandler = addHoldHandler;
+            this.holds = [];
+            this.favouriteSelectedHandlers = [];
+            this.load();
+        }
+        save() {
+            if (window.localStorage) {
+                window.localStorage.setItem('holds', JSON.stringify(this.holds));
+            }
+        }
+        load() {
+            if (window.localStorage) {
+                const savedHolds = window.localStorage.getItem('holds');
+                if (savedHolds) {
+                    this.holds = JSON.parse(savedHolds);
+                }
+            }
+        }
+        addFavouriteSelectedHandler(handler) {
+            this.favouriteSelectedHandlers.push(handler);
+        }
+        addFavouritesRenderedCallback(callback) {
+            this.favouritesRenderedCallback = callback;
+        }
+        add(hold) {
+            if (!this.holds.find(h => h.id == hold.id)) {
+                this.holds.push(hold);
+                this.save();
+                this.render();
+            }
+        }
+        delete(id) {
+            this.holds = this.holds.filter(h => h.id != id);
+            this.save();
+            this.render();
+        }
+        render() {
+            var _a, _b, _c, _d;
+            const thead = document.querySelector(this.tableSelector + ' thead');
+            const tbody = document.querySelector(this.tableSelector + ' tbody');
+            tbody.innerHTML = '';
+            for (let hold of this.holds) {
+                const rowId = 'hold-' + hold.id;
+                const deleteId = 'delete-' + hold.id;
+                const direction = hold.lefthand ? "Left" : "Right";
+                tbody.innerHTML += `<tr id="${rowId}">
+                <td>${hold.fix}</td>
+                <td>${hold.inboundTrack}</td>
+                <td>${direction}</td>
+                <td id="${deleteId}" class="delete">X</td>
+            </tr>`;
+            }
+            tbody.innerHTML += this.addHoldTemplate;
+            (_a = this.favouritesRenderedCallback) === null || _a === void 0 ? void 0 : _a.call(this);
+            // After the browser has inserted all elements above, now we can
+            // wire up all the click events
+            for (let hold of this.holds) {
+                const rowId = 'hold-' + hold.id;
+                (_b = document.getElementById(rowId)) === null || _b === void 0 ? void 0 : _b.addEventListener('click', (_) => {
+                    this.favouriteSelectedHandlers.forEach(h => h(hold));
+                });
+                const deleteId = 'delete-' + hold.id;
+                (_c = document.getElementById(deleteId)) === null || _c === void 0 ? void 0 : _c.addEventListener('click', (evt) => {
+                    this.delete(hold.id);
+                    event === null || event === void 0 ? void 0 : event.stopPropagation();
+                });
+            }
+            (_d = document.querySelector(this.tableSelector + ' .add')) === null || _d === void 0 ? void 0 : _d.addEventListener('click', (evt) => {
+                this.addHoldHandler(evt);
+            });
+        }
+    }
+    //# sourceMappingURL=favourites.js.map
+
+    class MenuProps {
+        constructor() {
+            this.toggleSelector = '#menu .menu-icon';
+            this.contentSelector = '#menu .menu-content';
+            this.addHoldFormSelector = '#addHold';
+            this.favouritesTableSelector = '#favourites';
+            this.newHoldFixInputId = 'favFix';
+            this.newHoldTrackInputId = 'favTrack';
+            this.newHoldLefthandCheckboxId = 'favLH';
+        }
+    }
+    class Menu {
+        constructor(props, addHoldTemplate) {
+            var _a;
+            this.props = props;
+            this.visible = false;
+            this.favourites = new Favourites(props.favouritesTableSelector, addHoldTemplate, (event) => this.addHold(event));
+            this.contentSelector = props.contentSelector;
+            (_a = document.querySelector(props.toggleSelector)) === null || _a === void 0 ? void 0 : _a.addEventListener('click', (evt) => {
+                this.visibility = !this.visible;
+            });
+            this.favourites.addFavouritesRenderedCallback(() => {
+                var _a, _b;
+                (_a = document.getElementById(props.newHoldFixInputId)) === null || _a === void 0 ? void 0 : _a.addEventListener('keyup', (evt) => {
+                    if (evt.keyCode === 13) {
+                        this.addHold(evt);
+                    }
+                });
+                (_b = document.getElementById(props.newHoldTrackInputId)) === null || _b === void 0 ? void 0 : _b.addEventListener('keyup', (evt) => {
+                    if (evt.keyCode === 13) {
+                        this.addHold(evt);
+                    }
+                });
+            });
+            this.favourites.render();
+        }
+        set visibility(visible) {
+            const display = visible ? 'block' : 'none';
+            document.querySelector(this.contentSelector).style.display = display;
+            this.visible = visible;
+        }
+        hide() {
+            this.visibility = false;
+        }
+        addFavouriteSelectedHandler(handler) {
+            this.favourites.addFavouriteSelectedHandler(handler);
+        }
+        addHold(event) {
+            const fixInputElt = document.getElementById(this.props.newHoldFixInputId);
+            const trackInputElt = document.getElementById(this.props.newHoldTrackInputId);
+            const lefthandCheckboxElt = document.getElementById(this.props.newHoldLefthandCheckboxId);
+            const fixName = fixInputElt.value.trim();
+            if (fixName) {
+                const track = Number.parseInt(trackInputElt.value) % 360;
+                this.favourites.add(new Hold(fixInputElt.value, track, lefthandCheckboxElt.checked));
+            }
+            fixInputElt.value = '';
+        }
+    }
+    //# sourceMappingURL=menu.js.map
 
     // HTML element selectors
     const chartId = '#chart';
@@ -14271,6 +14467,12 @@
     const timerId = '#timer';
     const timerLCDSelector = '#timer .lcd';
     const updateId = '#update-available';
+    const addHoldTemplate = `<tr class="addfix">
+    <td><input type="text" id="favFix" name="favFix" size="12" /></td>
+    <td><input type="text" id="favTrack" name="favTrack" size="3" value="0" /></td>
+    <td><label>LH <input type="checkbox" class="switch" id="favLH" name="favLH" /></label></td>
+    <td class="add">+</td>
+    </tr>`;
     var newWorker;
     window.onload = () => {
         var _a, _b, _c;
@@ -14290,6 +14492,13 @@
         chart.draw();
         (_c = document.querySelector(chartId)) === null || _c === void 0 ? void 0 : _c.addEventListener('click', (evt) => {
             chart.chartClicked(evt);
+        });
+        const menu = new Menu(new MenuProps(), addHoldTemplate);
+        menu.addFavouriteSelectedHandler(hold => {
+            chart.inboundTrack = hold.inboundTrack;
+            chart.lefthand = hold.lefthand;
+            chart.fixName = hold.fix;
+            menu.hide();
         });
         const controls = new Controls();
         controls.trackInputSelector = trackId;
