@@ -14215,6 +14215,7 @@
             plane.rotate(this._heading, ...planePosition.asArray);
         }
     }
+    //# sourceMappingURL=chart.js.map
 
     class Timer {
         constructor(timerButtonSelector, overlaySelector, lcdSelector) {
@@ -14246,6 +14247,7 @@
                 else {
                     this.showOverlay();
                 }
+                evt.stopPropagation();
             });
         }
         startTimer() {
@@ -14293,7 +14295,6 @@
             this.overlayVisible = false;
         }
     }
-    //# sourceMappingURL=timer.js.map
 
     // https://gist.github.com/hagemann/382adfc57adbd5af078dc93feef01fe1
     function slugify(s) {
