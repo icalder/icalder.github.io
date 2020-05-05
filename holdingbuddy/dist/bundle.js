@@ -2692,6 +2692,7 @@
         '--favourites-header-color': '#d6d6db',
         '--favourites-stripe-color': '#6c6b7b'
     };
+    //# sourceMappingURL=themes.js.map
 
     class Controls {
         constructor() {
@@ -2766,6 +2767,7 @@
             }
         }
     }
+    //# sourceMappingURL=controls.js.map
 
     var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -13770,6 +13772,7 @@
     List.extend(getMethodNames());
     registerMorphableType([SVGNumber, Color, Box, Matrix, SVGArray, PointArray, PathArray]);
     makeMorphable();
+    //# sourceMappingURL=svg.esm.js.map
 
     class Coord {
         constructor(x, y) {
@@ -13823,6 +13826,7 @@
         t.path(segment);
         t.textPath().attr('startOffset', '50%');
     }
+    //# sourceMappingURL=drawing.js.map
 
     class Defs$1 {
         constructor(svg) {
@@ -13851,6 +13855,7 @@
             return plane;
         }
     }
+    //# sourceMappingURL=svgdefs.js.map
 
     class Segment {
         constructor(name, startAngle, sweepDegrees) {
@@ -13875,6 +13880,7 @@
             return heading >= start && heading <= end;
         }
     }
+    //# sourceMappingURL=segment.js.map
 
     // https://svgjs.com/docs/3.0/installation/
     const SIN_30 = 0.5;
@@ -14191,14 +14197,32 @@
                     this.entryGroup.path(`M ${cx} ${cy + this.legLength} A ${this.turnRadius} ${this.turnRadius} 0 0 ${this.lefthand ? 1 : 0} ${xr} ${cy + this.legLength}`)
                         .fill({ opacity: 0 })
                         .rotate(this.inboundTrackDeg, cx, cy);
-                    // At completion of outbound turn in reverse, turn again back to the course to the fix
-                    // We'll just draw a line to a point 1/3 away from the fix i.e. cy + 0.33*leglength
-                    const yintercept = cy + 0.33 * this.legLength;
+                    // At completion of outbound turn in reverse, turn again back to the course to the fix                        
                     // Find the point of return at the start of the 'outbound' turn
                     const yr = cy + this.legLength;
-                    const returnLine = this.entryGroup.line(xr, yr, cx, yintercept)
-                        .rotate(this.inboundTrackDeg, cx, cy);
-                    returnLine.marker('end', endArrow);
+                    // Let's use a 45-degree angle - so yintercept = cy + this.circuitWidth
+                    const yintercept = yr - this.circuitWidth;
+                    let returnHeading = (this.inboundTrackDeg + (this.lefthand ? 45 : -45)) % 360;
+                    if (returnHeading < 0) {
+                        returnHeading = 360 + returnHeading;
+                    }
+                    const returnLineText = this.entryGroup.text(txt => {
+                        txt.tspan(`${returnHeading}°`).attr('text-anchor', 'middle');
+                    });
+                    // can't use 'side' for text above/below path as that's a SVG 2 feature :-(
+                    // Instead, have to draw path in the opposite direction when returnHeading > 180
+                    if (returnHeading <= 180) {
+                        const returnLine = this.entryGroup.path(`M ${xr} ${yr} L ${cx} ${yintercept}`)
+                            .rotate(this.inboundTrackDeg, cx, cy);
+                        returnLineText.path(returnLine).attr({ startOffset: '40%' });
+                        returnLine.marker('end', endArrow);
+                    }
+                    else {
+                        const returnLine = this.entryGroup.path(`M ${cx} ${yintercept} L ${xr} ${yr}`)
+                            .rotate(this.inboundTrackDeg, cx, cy);
+                        returnLineText.path(returnLine).attr({ startOffset: '60%' });
+                        returnLine.marker('start', endArrowReversed);
+                    }
                     break;
                 }
             }
@@ -14288,6 +14312,7 @@
             this.overlayVisible = false;
         }
     }
+    //# sourceMappingURL=timer.js.map
 
     // https://gist.github.com/hagemann/382adfc57adbd5af078dc93feef01fe1
     function slugify(s) {
@@ -14387,6 +14412,7 @@
             });
         }
     }
+    //# sourceMappingURL=favourites.js.map
 
     class MenuProps {
         constructor() {
@@ -14447,6 +14473,7 @@
             fixInputElt.value = '';
         }
     }
+    //# sourceMappingURL=menu.js.map
 
     // HTML element selectors
     const chartId = '#chart';
@@ -14585,5 +14612,6 @@
             }
         });
     }
+    //# sourceMappingURL=index.js.map
 
 })));
