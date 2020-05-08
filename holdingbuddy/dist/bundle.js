@@ -14554,8 +14554,8 @@
                 if ('webkitCompassHeading' in eventData) {
                     controls.compassDir = eventData['webkitCompassHeading'];
                 }
-                else {
-                    controls.compassDir = eventData.alpha;
+                else if (eventData.alpha != null) {
+                    controls.compassDir = 360 - eventData.alpha;
                 }
             });
         }
