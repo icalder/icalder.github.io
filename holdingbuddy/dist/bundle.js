@@ -14197,7 +14197,7 @@
                     this.entryGroup.path(`M ${cx} ${cy + this.legLength} A ${this.turnRadius} ${this.turnRadius} 0 0 ${this.lefthand ? 1 : 0} ${xr} ${cy + this.legLength}`)
                         .fill({ opacity: 0 })
                         .rotate(this.inboundTrackDeg, cx, cy);
-                    // At completion of outbound turn in reverse, turn again back to the course to the fix                        
+                    // At completion of outbound turn in reverse, turn again back to the course to the fix
                     // Find the point of return at the start of the 'outbound' turn
                     const yr = cy + this.legLength;
                     // Let's use a 45-degree angle - so yintercept = cy + this.circuitWidth
@@ -14233,6 +14233,7 @@
             plane.rotate(this._heading, ...planePosition.asArray);
         }
     }
+    //# sourceMappingURL=chart.js.map
 
     class Timer {
         constructor(timerButtonSelector, overlaySelector, lcdSelector) {
@@ -14489,7 +14490,7 @@
     const updateId = '#update-available';
     const addHoldTemplate = `<tr class="addfix">
     <td><input type="text" id="favFix" name="favFix" size="12" /></td>
-    <td><input type="text" id="favTrack" name="favTrack" size="3" value="0" /></td>
+    <td><input type="number" id="favTrack" name="favTrack" min="0" max="360" value="0" /></td>
     <td><label>LH <input type="checkbox" class="switch" id="favLH" name="favLH" /></label></td>
     <td class="add">+</td>
     </tr>`;
@@ -14612,6 +14613,5 @@
             }
         });
     }
-    //# sourceMappingURL=index.js.map
 
 })));
