@@ -14137,7 +14137,7 @@
                     // | \
                     // |  \
                     // say hypotenuse = legLength. Then: x-offset = sin(angle) * legLength, y-offset = cos(angle) * legLength
-                    let teardropBearing = this.lefthand ? this.outboundTrackDeg + 30 : this.outboundTrackDeg - 30;
+                    let teardropBearing = (this.lefthand ? this.outboundTrackDeg + 30 : this.outboundTrackDeg - 30) % 360;
                     if (teardropBearing < 0) {
                         teardropBearing += 360;
                     }
@@ -14233,7 +14233,6 @@
             plane.rotate(this._heading, ...planePosition.asArray);
         }
     }
-    //# sourceMappingURL=chart.js.map
 
     class Timer {
         constructor(timerButtonSelector, overlaySelector, lcdSelector) {
@@ -14613,5 +14612,6 @@
             }
         });
     }
+    //# sourceMappingURL=index.js.map
 
 })));
