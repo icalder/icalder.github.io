@@ -13844,12 +13844,14 @@
             return stopwatch;
         }
         definePlane(svg) {
-            const plane = svg.defs().group();
+            const plane = svg.defs().nested();
             plane.polygon('16,8 24,8 20,0');
             plane.rect(8, 30).radius(5).x(16).y(5).fill('black');
             plane.polygon('0,25, 40,25, 20,15');
             plane.polygon('12,38, 28,38, 20,28');
             plane.polygon('18,38, 22,38, 20,42');
+            plane.width(40);
+            plane.height(42);
             // Position the plane centered at (0,0) so when we USE it at (x,y) there's no offset to add       
             plane.center(0, 0);
             return plane;
@@ -14059,6 +14061,7 @@
                 const group = marker.group();
                 group.text(txt => {
                     txt.tspan(trackDeg.toString() + '°')
+                        .attr('dominant-baseline', 'text-before-edge')
                         .attr('text-anchor', 'start');
                 }).y(8);
                 this.lefthand ? group.use(this.defs.lhArrow).y(25) : group.use(this.defs.rhArrow).y(25);
@@ -14068,6 +14071,7 @@
                 const group = marker.group();
                 group.text(txt => {
                     txt.tspan(trackDeg.toString() + '°')
+                        .attr('dominant-baseline', 'text-before-edge')
                         .attr('text-anchor', 'start');
                 }).y(10);
                 this.lefthand ? group.use(this.defs.rhArrow) : group.use(this.defs.lhArrow);
@@ -14228,7 +14232,7 @@
             }
         }
         drawPlane(planePosition) {
-            let plane = this.entryGroup.use(this.defs.plane);
+            const plane = this.entryGroup.use(this.defs.plane);
             plane.center(...planePosition.asArray);
             plane.rotate(this._heading, ...planePosition.asArray);
         }
